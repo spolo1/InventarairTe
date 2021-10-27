@@ -39,8 +39,8 @@ const Register = ({navigation}) => {
             <Text style={styles.text}>Registrarse</Text>
             <Text style={styles.header1}>Nombre de Usuario</Text>
             <View style={styles.inputs}>
-                <IconFontAwesome
-                    name='user'
+                <IconAntDesign 
+                    name='user' 
                     size={30}
                     style={styles.icons}
                 />
@@ -89,12 +89,12 @@ const Register = ({navigation}) => {
         </View>
         <Button text="Registrarse"onPress={() => doUserRegistration()} />
         <View style={styles.registro}>
-                    <Text>¿No tienes cuenta?</Text>
+                    <Text>¿Tienes cuenta?</Text>
                     <TouchableOpacity 
                         onPress={()=>{
                         navigation.navigate('Login')
                     }}>
-                        <Text style={styles.text2}>  Registrarse</Text>
+                        <Text style={styles.text2}> Iniciar Sesión</Text>
                     </TouchableOpacity>
                 </View>
         </View>

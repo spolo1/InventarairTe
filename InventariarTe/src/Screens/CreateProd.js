@@ -1,5 +1,5 @@
 import React,{useState}from 'react';
-import { View, SafeAreaView, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import TopBar from '../Components/TopBar'
 import BottomBar from '../Components/BottomBar'
 import Button from '../Components/Button';
@@ -8,14 +8,12 @@ import { Alert } from 'react-native';
 import Parse from 'parse/react-native';
 
 const CreateProd = ({navigation}) => {  
+
   const [prodName, setprodName] = useState('');
   const [date, setDate] = useState('');
   const [cant, setCant] = useState('');
   const [code, setCode] = useState('');
   var numCode = parseInt(code);
-
-  const [isDateVisible,setDateVisible]=useState(false);
-
   const Alerts = () =>{
     if(prodName==""||date==""||cant==""||code==""){
           Alert.alert("Advertencia",
@@ -45,13 +43,13 @@ const CreateProd = ({navigation}) => {
     }
   }
 
-
   return (
-    <SafeAreaView style={styles.container}>
-        <View style={styles.top}> 
-          <TopBar/>
-        </View>
-          <Text style={styles.titl}>Ingresar Productos</Text>
+    <View style={styles.container}>
+      <View style={styles.top}>
+        <TopBar/>
+      </View>
+      <View style={styles.content}>
+      <Text style={styles.titl}>Ingresar Productos</Text>
           <View style={styles.form}>
             <View style={styles.InputBox}>
                       <TextInput
@@ -91,22 +89,21 @@ const CreateProd = ({navigation}) => {
           </View>
           <Button
             text="Crear Producto"
-            onPress={()=>Alerts()}
+            onPress={() =>Alerts()}
           />
             <BorderButton
               text="Cancelar"
               onPress={()=>{navigation.navigate('Profile')}}
             />          
-          <View style={styles.bot}>
-            <BottomBar
-              pr1={()=>{navigation.navigate('ProdList')}}
-              pr3={()=>{navigation.navigate('ScanCode')}}
-              pr4={()=>{navigation.navigate('Profile')}}
-            />  
-          </View>
-          
-        
-    </SafeAreaView>
+      </View>
+      <View style={styles.bot}>
+        <BottomBar
+          pr1={()=>{navigation.navigate('ProdList')}}
+          pr3={()=>{navigation.navigate('ScanCode')}}
+          pr4={()=>{navigation.navigate('Profile')}}
+          />
+      </View>
+    </View>
   );
 }
 
@@ -120,11 +117,13 @@ const styles = StyleSheet.create({
       },
       bot:{
         justifyContent:'flex-end',
-        flex:1
+        flex:1,
+        backgroundColor: '#188209'
       },
       top:{
         justifyContent:'flex-start',
-        flex:1
+        flex:1,
+        backgroundColor: '#188209'
       },
       titl:{
         marginTop:'10%',
@@ -145,6 +144,10 @@ const styles = StyleSheet.create({
         marginBottom:10,
       },
       form:{
-        marginTop:'15%'
+        marginTop:'10%'
+      },
+      content:{
+        flex:10,
+        alignItems:'center',
       },
 })

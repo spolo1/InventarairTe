@@ -9,7 +9,7 @@ import Profile from '../Screens/Profile';
 import ProdList from '../Screens/ProdList';
 import Stats from '../Screens/Stats';
 import History from '../Screens/History';
-
+import RestorePassword from '../Screens/RestorePassword';
 const Stack = createNativeStackNavigator();
 
 const Routes =()=>{
@@ -51,6 +51,10 @@ const Routes =()=>{
                 <Stack.Screen
                     name='Profile'
                     component={Profile}
+                />
+                <Stack.Screen 
+                    name='RestorePassword'
+                    component={RestorePassword}
                 />
             </Stack.Navigator>
         </NavigationContainer>

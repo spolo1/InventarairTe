@@ -86,7 +86,7 @@ return (
         <View style={styles.registro}>
                     <Text>¿Olvidastes Tu contraseña?</Text>
                     <TouchableOpacity 
-                        onPress={()=>{navigation.navigate('Register')}}>
+                        onPress={()=>{navigation.navigate('RestorePassword')}}>
                         <Text style={styles.text}> Recuperar</Text>
                     </TouchableOpacity>
         </View>
