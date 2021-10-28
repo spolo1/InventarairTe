@@ -1,30 +1,40 @@
-import React,{useState}from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import React,{useState, useEffect}from 'react';
+import { View, Text, StyleSheet, TextInput, Platform } from 'react-native';
 import TopBar from '../Components/TopBar'
 import BottomBar from '../Components/BottomBar'
 import Button from '../Components/Button';
 import BorderButton from '../Components/RoundButton'
 import { Alert } from 'react-native';
 import Parse from 'parse/react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const CreateProd = ({navigation}) => {  
 
   const [prodName, setprodName] = useState('');
-  const [date, setDate] = useState('');
   const [cant, setCant] = useState('');
   const [code, setCode] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show,setShow]= useState(false);
+  const [text,setText]=useState('Fecha de Vencimiento');
   var numCode = parseInt(code);
-  const Alerts = () =>{
-    if(prodName==""||date==""||cant==""||code==""){
-          Alert.alert("Advertencia",
-              "Por favor rellene todos los campos antes de enviar",
-              [{text:'OK'}]
-          )
-      }
-      else{
-          CreateProduct();
-      }
+
+  const onChange = (event,selectedDate)=>{
+    const currentDate =  selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    
+    let temp = new Date(currentDate);
+    let format = temp.getDate()+'/'+(temp.getMonth()+1)+'/'+temp.getFullYear();
+    setText (format)
+    console.log(format)
   }
+
+  const showMode = (currentMode) =>{
+    setShow(true)
+    setMode(currentMode)
+  } 
+
   const CreateProduct = async function (){
     const newName = prodName;
     const newCode = numCode;
@@ -51,6 +61,7 @@ const CreateProd = ({navigation}) => {
       <View style={styles.content}>
       <Text style={styles.titl}>Ingresar Productos</Text>
           <View style={styles.form}>
+            <Text style={styles.text}>Nombre del Producto</Text>
             <View style={styles.InputBox}>
                       <TextInput
                           value={prodName}
@@ -59,15 +70,21 @@ const CreateProd = ({navigation}) => {
                           autoCapitalize={'none'}
                       />            
             </View>
+            <Text style={styles.text}>Fecha de Vencimiento</Text>
             <View style={styles.InputBox}>
-              <TextInput
-                //crear metodo para la fecha
-                value={date}
-                placeholder={'Fecha de vencimiento'}
-                onChangeText={(text) => setDate(text)}
-                autoCapitalize={'none'}
-              />  
+                <Text onPress={()=> showMode('date')}>
+                    {text}
+                </Text>
+                {show && (
+                  <DateTimePicker
+                    testID='datetimepicker'
+                    value={date}
+                    mode={date}
+                    display='spinner'
+                    onChange = {onChange}
+                  />)} 
             </View>
+            <Text style={styles.text}>Cantidad</Text>
             <View style={styles.InputBox}>
                       <TextInput
                           value={cant}
@@ -77,6 +94,7 @@ const CreateProd = ({navigation}) => {
                           autoCapitalize={'none'}
                       />            
             </View>
+            <Text style={styles.text}>Código de barras</Text>
             <View style={styles.InputBox}>
                       <TextInput
                           value={code}
@@ -89,7 +107,7 @@ const CreateProd = ({navigation}) => {
           </View>
           <Button
             text="Crear Producto"
-            onPress={() =>Alerts()}
+            onPress={() =>CreateProduct()}
           />
             <BorderButton
               text="Cancelar"
@@ -149,5 +167,8 @@ const styles = StyleSheet.create({
       content:{
         flex:10,
         alignItems:'center',
+      },
+      text:{
+        marginLeft:'3%'
       },
 })
