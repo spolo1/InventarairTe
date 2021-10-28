@@ -1,10 +1,9 @@
-import React, { FC, ReactElement, useState } from "react";
+import React, {useState } from "react";
 import {SafeAreaView,StyleSheet, TouchableOpacity,Text,View, TextInput,ScrollView, Alert} from 'react-native';
 import Button from '../Components/Button'
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import IconFontisto from 'react-native-vector-icons/Fontisto'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome'
 import Parse from "parse/react-native";
 
 const Register = ({navigation}) => {
@@ -35,69 +34,71 @@ const Register = ({navigation}) => {
                 }}>
                     <IconIonicons name='arrow-back' size={30}/>
         </TouchableOpacity>
-        <View style={styles.form}>
-            <Text style={styles.text}>Registrarse</Text>
-            <Text style={styles.header1}>Nombre de Usuario</Text>
+        <Text style={styles.text}>Registrarse</Text>
+        <ScrollView>
+            <View style={styles.form}>
+                <Text style={styles.header1}>Nombre de Usuario</Text>
+                <View style={styles.inputs}>
+                    <IconAntDesign 
+                        name='user' 
+                        size={30}
+                        style={styles.icons}
+                    />
+                <View style={styles.InputBox}>
+                    <TextInput
+                        value={usernme}
+                        placeholder={"Nombre de Usuario"}
+                        onChangeText={(text) => setUsername(text)}
+                        autoCapitalize={"none"}
+                    />
+                </View>
+            </View>
+            <Text style={styles.header3}>Correo</Text>
+            <View style={styles.inputs}>
+            <IconFontisto 
+                name='email' 
+                size={30}
+                style={styles.icons}/>
+                <View style={styles.InputBox}>
+                    <TextInput
+                        placeholder='correo' 
+                        textAlign='left'
+                        value={correo}
+                        autoCapitalize='none'
+                        onChangeText={(val)=>setCorreo(val)}
+                />            
+                </View>
+            </View>
+            <Text style={styles.header2}>Contraseña</Text>
             <View style={styles.inputs}>
                 <IconAntDesign 
-                    name='user' 
+                    name='lock' 
                     size={30}
+                    secureTextEntry={true}
                     style={styles.icons}
                 />
-            <View style={styles.InputBox}>
-                <TextInput
-                    value={usernme}
-                    placeholder={"Nombre de Usuario"}
-                    onChangeText={(text) => setUsername(text)}
-                    autoCapitalize={"none"}
-                />
-            </View>
-        </View>
-        <Text style={styles.header3}>Correo</Text>
-        <View style={styles.inputs}>
-        <IconFontisto 
-            name='email' 
-            size={30}
-            style={styles.icons}/>
-            <View style={styles.InputBox}>
-                <TextInput
-                    placeholder='correo' 
-                    textAlign='left'
-                    value={correo}
-                    autoCapitalize='none'
-                    onChangeText={(val)=>setCorreo(val)}
-            />            
-            </View>
-        </View>
-        <Text style={styles.header2}>Contraseña</Text>
-        <View style={styles.inputs}>
-            <IconAntDesign 
-                name='lock' 
-                size={30}
-                secureTextEntry={true}
-                style={styles.icons}
-            />
-            <View style={styles.InputBox}>
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    placeholder={"Contraseña"}
-                    secureTextEntry
-                    onChangeText={(text) => setPassword(text)}
-                />
-            </View>
-        </View>
-        <Button text="Registrarse"onPress={() => doUserRegistration()} />
-        <View style={styles.registro}>
-                    <Text>¿Tienes cuenta?</Text>
-                    <TouchableOpacity 
-                        onPress={()=>{
-                        navigation.navigate('Login')
-                    }}>
-                        <Text style={styles.text2}> Iniciar Sesión</Text>
-                    </TouchableOpacity>
+                <View style={styles.InputBox}>
+                    <TextInput
+                        style={styles.input}
+                        value={password}
+                        placeholder={"Contraseña"}
+                        secureTextEntry
+                        onChangeText={(text) => setPassword(text)}
+                    />
                 </View>
-        </View>
+            </View>
+            <Button text="Registrarse"onPress={() => doUserRegistration()} />
+            <View style={styles.registro}>
+                        <Text>¿Tienes cuenta?</Text>
+                        <TouchableOpacity 
+                            onPress={()=>{
+                            navigation.navigate('Login')
+                        }}>
+                            <Text style={styles.text2}> Iniciar Sesión</Text>
+                        </TouchableOpacity>
+                    </View>
+            </View>
+        </ScrollView>    
     </SafeAreaView>
 );
 };
@@ -118,7 +119,7 @@ container:{
     text:{
         fontSize:20,
         color:'#188209',
-        marginBottom:40,
+        marginTop:40,
     },
     inputs:{
         marginTop:10,
