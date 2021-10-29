@@ -16,7 +16,7 @@ const RestorePassword = ({navigation}) => {
         return await Parse.User.requestPasswordReset(emailValue)
             .then(() => {
             // logIn returns the corresponding ParseUser object
-            navigation.navigate('Login')
+            submitAndClear();
             Alert.alert(
                 'Exito!',
                 `Revise su correo ${mail} para proceder con el reinicio de su contraseña.`,
@@ -29,6 +29,11 @@ const RestorePassword = ({navigation}) => {
             return false;
         });
     };
+    const submitAndClear = () => {
+        let clear = '';
+        setMail(clear);
+        navigation.navigate('Login');
+    }
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity 
@@ -54,6 +59,7 @@ const RestorePassword = ({navigation}) => {
                             value={mail}
                             autoCapitalize='none'
                             onChangeText={(val)=>setMail(val)}
+                            clearButtonMode='always'
                         />            
                     </View>
                 </View>

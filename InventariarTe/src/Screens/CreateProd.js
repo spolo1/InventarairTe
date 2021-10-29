@@ -17,7 +17,6 @@ const CreateProd = ({navigation}) => {
   const [show,setShow]= useState(false);
   const [text,setText]=useState('Fecha de Vencimiento');
   var numCode = parseInt(code);
-  const [readResults, setReadResults] = useState([]);
 
   const onChange = (event,selectedDate)=>{
     const currentDate =  selectedDate || date;
@@ -38,36 +37,31 @@ const CreateProd = ({navigation}) => {
   const CreateProduct = async function (){
     const newName = prodName;
     const newCode = numCode;
+    const newDate = date;
     let Prod = new Parse.Object('Products');
     Prod.set('ProductName', newName);
     Prod.set('Code', newCode);
+    Prod.set('Vencimiento',newDate);
 
     try{
       await Prod.save();
       Alert.alert('Exito!','Producto agregado!');
-      navigation.navigate('Profile');
+      submitAndClear();
+      
       return true;
     }catch(error){
       Alert.alert('Advertencia!',error.message);
       return false;
     }
   }
-  const readTodos = async function () {
-    // Reading parse objects is done by using Parse.Query
-    const parseQuery = new Parse.Query('Todo');
-    try {
-      let todos = await parseQuery.find();
-      // Be aware that empty or invalid queries return as an empty array
-      // Set results to state variable
-      setReadResults(todos);
-      Alert.alert('Advertencia!',todos)
-      return true;
-    } catch (error) {
-      // Error can be caused by lack of Internet connection
-      Alert.alert('Error!', error.message);
-      return false;
-    };
-  };
+  const submitAndClear = () => {
+    let clear = '';
+    setprodName (clear);
+    setCant(clear);
+    setCode(clear);
+    setDate(clear);
+    navigation.navigate('ProdList');
+}
 
   return (
     <View style={styles.container}>
@@ -86,6 +80,7 @@ const CreateProd = ({navigation}) => {
                             placeholder={'Nombre Producto'}
                             onChangeText={(text) => setprodName(text)}
                             autoCapitalize={'none'}
+                            clearButtonMode='always'
                         />            
               </View>
               <Text style={styles.text}>Fecha de Vencimiento</Text>
@@ -110,26 +105,20 @@ const CreateProd = ({navigation}) => {
                             keyboardType='numeric'
                             onChangeText={(text) => setCant(text)}
                             autoCapitalize={'none'}
+                            clearButtonMode='always'
                         />            
               </View>
               <Text style={styles.text}>Código de barras</Text>
-              <View style={styles.JoinBox}>
-                <View style={styles.CodeBox}>
+                <View style={styles.InputBox}>
                   <TextInput
                     value={code}
                     placeholder={'Código de barras'}
                     keyboardType='numeric'
                     onChangeText={(text) => setCode(text)}
                     autoCapitalize={'none'}
+                    clearButtonMode='always'
                   />    
-                </View>
-                <But 
-                  color="#188209"
-                  title="Verificar Código"
-                  type="outline"
-                  onPress={() =>readTodos()}
-                />            
-              </View>
+                </View>   
             </View>
             <Button
               text="Crear Producto"
@@ -137,7 +126,7 @@ const CreateProd = ({navigation}) => {
             />
               <BorderButton
                 text="Cancelar"
-                onPress={()=>{navigation.navigate('Profile')}}
+                onPress={()=>{navigation.navigate('ProdList')}}
               />
           </ScrollView>            
       </View>

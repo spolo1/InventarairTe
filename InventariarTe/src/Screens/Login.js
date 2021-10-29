@@ -1,5 +1,5 @@
 import React, {FC, ReactElement, useState} from 'react';
-import {Text, SafeAreaView, Image,ScrollView, StyleSheet,View, TouchableOpacity,TextInput,Alert} from 'react-native';
+import {StatusBar,Text, SafeAreaView, Image,ScrollView, StyleSheet,View, TouchableOpacity,TextInput,Alert} from 'react-native';
 import Button from '../Components/Button'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import Parse from 'parse/react-native';
@@ -7,25 +7,32 @@ import Parse from 'parse/react-native';
 const Login = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const [text,setText] = useState('');
     const doUserLogIn = async function () {
         const usernameValue = username;
         const passwordValue = password;
         return await Parse.User.logIn(usernameValue, passwordValue)
         .then(async (loggedInUser) => {
-            navigation.navigate('CreateProd')
             const currentUser = await Parse.User.currentAsync();
             console.log(loggedInUser === currentUser);
-            return true;
+            submitAndClear();
         })
         .catch((error) => {
             Alert.alert('Error!', error.message);
-            return false;
         });
-};
+    };
 
+    const submitAndClear = () => {
+        let clear = '';
+        setUsername (clear);
+        setPassword(clear);
+        navigation.navigate('ProdList');
+    }
 return (
     <SafeAreaView style = {styles.container}>
+        <StatusBar
+            backgroundColor= '#323F3A'
+        />
         <Image 
             style={{ 
                 marginTop:100,
@@ -56,6 +63,7 @@ return (
                                 onChangeText={(text) => setUsername(text)}
                                 autoCapitalize={'none'}
                                 keyboardType={'email-address'}
+                                clearButtonMode='always'
                             />            
                         </View>
                 </View>
@@ -72,6 +80,7 @@ return (
                             placeholder={'Password'}
                             secureTextEntry
                             onChangeText={(text) => setPassword(text)}
+                            clearButtonMode='always'
                         />            
                     </View>
                 </View>

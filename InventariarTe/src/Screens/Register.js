@@ -12,18 +12,25 @@ const Register = ({navigation}) => {
     const [correo,setCorreo]=useState('');
 
     const doUserRegistration = async function () {
-    const user = new Parse.User();
-    user.set("username",usernme)
-    user.set("password",password);
-    user.set("email",correo);
-    try{
-        await user.signUp();
-        navigation.navigate("Login")
+        const user = new Parse.User();
+        user.set("username",usernme)
+        user.set("password",password);
+        user.set("email",correo);
+        try{
+            await user.signUp();
+            submitAndClear();
+        }
+        catch(error){
+            Alert.alert("Error!", error.message);
+        }
+    };
+    const submitAndClear = () => {
+        let clear = '';
+        setUsername (clear);
+        setPassword(clear);
+        setCorreo(clear);
+        navigation.navigate('Login');
     }
-    catch(error){
-        Alert.alert("Error!", error.message);
-    }
-};
 
     return (
     <SafeAreaView style={styles.container}>
@@ -50,6 +57,7 @@ const Register = ({navigation}) => {
                         placeholder={"Nombre de Usuario"}
                         onChangeText={(text) => setUsername(text)}
                         autoCapitalize={"none"}
+                        clearButtonMode='always'
                     />
                 </View>
             </View>
@@ -66,6 +74,7 @@ const Register = ({navigation}) => {
                         value={correo}
                         autoCapitalize='none'
                         onChangeText={(val)=>setCorreo(val)}
+                        clearButtonMode='always'
                 />            
                 </View>
             </View>
@@ -84,6 +93,7 @@ const Register = ({navigation}) => {
                         placeholder={"Contraseña"}
                         secureTextEntry
                         onChangeText={(text) => setPassword(text)}
+                        clearButtonMode='always'
                     />
                 </View>
             </View>
