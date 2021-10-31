@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { List } from 'react-native-paper';
 
-class ListProduct extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
+const ListProduct = (props) => {
+  const {text,date}=props
+  const [expanded, setExpanded] = React.useState(true);
 
-  render() {
-    return (
-      <View>
-        <Text> ListProduct </Text>
-      </View>
-    );
-  }
+  const handlePress = () => setExpanded(!expanded);
+  return(
+    <List.Section>
+      <List.Accordion
+        title={text}
+        left={props => <List.Icon {...props} />}>
+        <List.Item title="First item" />
+        <List.Item title="Second item" />
+      </List.Accordion>
+    </List.Section>
+  )
 }
 
 export default ListProduct;

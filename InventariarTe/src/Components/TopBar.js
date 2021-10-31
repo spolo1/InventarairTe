@@ -1,36 +1,38 @@
 import React, { useState }  from 'react';
 import { Text, View, StyleSheet, TouchableOpacity,} from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
-import { CheckBox } from 'react-native-elements'
+import { Checkbox } from 'react-native-paper';
+
 
 const TopBar = () => {
-    const [isSelected, setSelection] = useState(false);
-    const [checked, toggleChecked] = useState(false);
-  return (
-    <View style={styles.box}>
-        <View style={styles.box1}>
-            <Text style={styles.text}>
-                Inventariarte
-            </Text>
-        </View>
-            <TouchableOpacity>
+    const [checked,setCheked] = useState(false);
+    return (
+        <View style={styles.box}>
+            <View style={styles.box1}>
+                <Text style={styles.text}>
+                    Inventariarte
+                </Text>
+            </View>
+                <TouchableOpacity>
+                    <IconIonicons 
+                        name='notifications-outline'
+                        size={30}
+                        color='#FFFFFF'
+                    />  
+                </TouchableOpacity>
+                <Checkbox
+                    status={checked ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                        setCheked(!checked);
+                    }}
+                    color='white'
+                />
                 <IconIonicons 
-                    name='notifications-outline'
+                    name='trash-outline'
                     size={30}
-                    color='#FFFFFF'
-                />  
-            </TouchableOpacity>
-            <CheckBox
-                checked={checked}
-                onPress={() => toggleChecked(!checked)}
-                size={30}
-            />
-            <IconIonicons 
-                name='trash-outline'
-                size={30}
-                color='white'/>
-    </View>
-  );
+                    color='white'/>
+        </View>
+    );
 }
 
 export default TopBar;

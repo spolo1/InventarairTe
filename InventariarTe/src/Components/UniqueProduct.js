@@ -1,23 +1,38 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
-const UniqueProduct = (props) => {
+import { Checkbox } from 'react-native-paper';
 
+const UniqueProduct = (props) => {
+    const [checked,setCheked] = useState(false);
+    const {text,date} = props
+
+    const borrar=()=>{
+
+    }
     return(
             <View style={styles.container}>
                 <View>
-                    <Text>CheckBox</Text>
+                <Checkbox
+                    status={checked ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                        setCheked(!checked);
+                    }}
+                    color='green'
+                />
                 </View>
                 <View style={styles.content}>    
-                    <Text>Prodcuto</Text>
-                    <Text>DueDate</Text>
+                    <Text style = {styles.text}>{text}</Text>
+                    <Text>{date}</Text>
                 </View>
                 <View style={styles.trash}>
-                    <IconIonicons 
-                        name='notifications-outline'
-                        size={30}
-                        color='#FFFFFF'
-                    /> 
+                    <TouchableOpacity onPress={()=>borrar()}>
+                        <IconIonicons 
+                            name='trash-outline'
+                            size={30}
+                            color='#188209'
+                        /> 
+                    </TouchableOpacity>
                 </View>
             </View>
     )
@@ -28,18 +43,26 @@ const styles = StyleSheet.create({
     container:{
         borderRadius:5,
         height:60,
-        backgroundColor: '#9ADB91',
+        backgroundColor: '#EA8D8D',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around',
-        width:'80%',
+        width:'85%',
+        marginLeft:'5.5%',
+        marginBottom:'5%',
     },
     content:{
         flexDirection:'column',
         justifyContent: 'space-around',
         flex:4,
+        marginLeft:'3%',
     },
     trash:{
         flex:1,
     },
+    text:{
+        fontSize:18,
+        fontWeight:'bold'
+    }
+
 })
