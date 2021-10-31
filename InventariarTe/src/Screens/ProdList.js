@@ -15,7 +15,9 @@ const CreateProd = ({navigation}) => {
             </View>
             <View style={styles.content}>
                 <Text style={styles.text}>Lista de productos</Text>
-                <Product/>
+                <Product
+                    color='blue'    
+                />
             </View>
             <View style={styles.bot}>
             <BottomBar
