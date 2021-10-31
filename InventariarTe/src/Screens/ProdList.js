@@ -2,10 +2,9 @@ import React,{useState}from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import TopBar from '../Components/TopBar'
 import BottomBar from '../Components/BottomBar'
-import Button from '../Components/Button';
-import BorderButton from '../Components/RoundButton'
-import { Alert } from 'react-native';
 import Parse from 'parse/react-native';
+import Product from '../Components/UniqueProduct';
+
 
 const CreateProd = ({navigation}) => {  
 
@@ -16,6 +15,7 @@ const CreateProd = ({navigation}) => {
             </View>
             <View style={styles.content}>
                 <Text style={styles.text}>Lista de productos</Text>
+                <Product/>
             </View>
             <View style={styles.bot}>
             <BottomBar
