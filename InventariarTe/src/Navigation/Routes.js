@@ -11,6 +11,7 @@ import Stats from '../Screens/Stats';
 import History from '../Screens/History';
 import RestorePassword from '../Screens/RestorePassword';
 import SearchProduct from '../Screens/SearchProduct';
+import CreateProdCode from '../Screens/CreateProdCode';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,10 @@ const Routes =()=>{
                 <Stack.Screen
                     name="SearchProduct"
                     component = {SearchProduct}
+                />
+                <Stack.Screen
+                    name="CreateProdCode"
+                    component = {CreateProdCode}
                 />
             </Stack.Navigator>
         </NavigationContainer>

@@ -8,22 +8,31 @@ import Parse from 'parse/react-native';
 const SearchProduct = ({navigation}) => {
 
     const [product,setProduct] = useState()
-
-    const SearchProd = async function (){
-        const ProdQuery = new Parse.Query('Products')
+    
+    const SearchProd = async function (product){
+        let query = new Parse.Query ('Products');
+        console.log(product)
         try{
-            let Prod = await ProdQuery.get()
-            setProduct(Prod)
-            Alert.alert('Advertencia',product)
+            query.contains('Code',product)
+            let queryResult = await query.find();
+            console.log(queryResult);
+            console.log(queryResult.length)
+            if(queryResult.length === 0 || queryResult.length > 1){
+                Alert.alert("Advertencia!", 'Producto no encontrado');
+                submitAndClear();
+            }
+            else{
+                submitAndClear();
+                navigation.navigate('CreateProdCode')
+            }
         }catch(error){
             Alert.alert('Advertencia!',error.message);
         }
+        
     }
-
     const submitAndClear = () => {
         let clear = '';
         setProduct(clear);
-        navigation.navigate('ProdList');
     }
     return (
         <SafeAreaView style={styles.container}>
@@ -57,7 +66,7 @@ const SearchProduct = ({navigation}) => {
             </View>
             <Button 
                 text="Buscar Producto"
-                onPress={() => SearchProd()}
+                onPress={() => SearchProd(product)}
             />
             <RoundButton
                 text="Cancelar"
