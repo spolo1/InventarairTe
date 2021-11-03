@@ -7,6 +7,8 @@ import BorderButton from '../Components/RoundButton'
 import { Alert } from 'react-native';
 import Parse from 'parse/react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Overlay } from 'react-native-elements';
+
 const CreateProd = ({navigation}) => {  
 
   const [prodName, setprodName] = useState('');
@@ -16,6 +18,12 @@ const CreateProd = ({navigation}) => {
   const [mode, setMode] = useState('date');
   const [show,setShow]= useState(false);
   const [text,setText]=useState('Fecha de Vencimiento');
+  const [visible, setVisible] = useState(false);
+    
+  const toggleOverlay = () => {
+      setVisible(!visible);
+  };
+
   var numCode = parseInt(code);
 
   const onChange = (event,selectedDate)=>{
@@ -37,7 +45,7 @@ const CreateProd = ({navigation}) => {
   const CreateProduct = async function (){
     const newName = prodName;
     const newCode = numCode;
-    const newDate = date;
+    {/*const newDate = date;*/}
     let Prod = new Parse.Object('Products');
     Prod.set('ProductName', newName);
     Prod.set('Code', newCode);
@@ -130,9 +138,21 @@ const CreateProd = ({navigation}) => {
               />
           </ScrollView>            
       </View>
+      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <Text>¿De que manera quieres crear el producto?</Text>
+                    <Button
+                        text="¿Buscar en la aplicación?"
+                        onPress={()=>{navigation.navigate('SearchProduct')}}
+                    />
+                    <Button
+                        text="¿Ingresar manualmente?"
+                        onPress={()=>{navigation.navigate('CreateProd')}}
+                    />
+                </Overlay>
       <View style={styles.bot}>
         <BottomBar
           pr1={()=>{navigation.navigate('ProdList')}}
+          pr2={toggleOverlay}
           pr3={()=>{navigation.navigate('ScanCode')}}
           pr4={()=>{navigation.navigate('Profile')}}
           />

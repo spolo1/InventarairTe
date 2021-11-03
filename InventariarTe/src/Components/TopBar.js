@@ -1,11 +1,9 @@
 import React, { useState }  from 'react';
 import { Text, View, StyleSheet, TouchableOpacity,} from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
-import { Checkbox } from 'react-native-paper';
 
 
 const TopBar = () => {
-    const [checked,setCheked] = useState(false);
     return (
         <View style={styles.box}>
             <View style={styles.box1}>
@@ -20,17 +18,6 @@ const TopBar = () => {
                         color='#FFFFFF'
                     />  
                 </TouchableOpacity>
-                <Checkbox
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        setCheked(!checked);
-                    }}
-                    color='white'
-                />
-                <IconIonicons 
-                    name='trash-outline'
-                    size={30}
-                    color='white'/>
         </View>
     );
 }

@@ -4,10 +4,15 @@ import IconIonicons from 'react-native-vector-icons/Ionicons'
 import Button from '../Components/Button';
 import Parse from 'parse/react-native';
 import BlankButton from '../Components/BlankButton';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Overlay } from 'react-native-elements';
 
 const Profile= ({navigation}) => {
     const [username, setUsername] = useState('');
+    const [visible, setVisible] = useState(false);
+    
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
     useEffect(()=>{
         async function getCurrentUser(){
             if(username===''){
@@ -55,20 +60,29 @@ const Profile= ({navigation}) => {
                         navigation.navigate('History')
                     }}
                 />
+                <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <Text>¿De que manera quieres crear el producto?</Text>
+                    <Button
+                        text="¿Buscar en la aplicación?"
+                        onPress={()=>{navigation.navigate('SearchProduct')}}
+                    />
+                    <Button
+                        text="¿Ingresar manualmente?"
+                        onPress={()=>{navigation.navigate('CreateProd')}}
+                    />
+                </Overlay>
                 <View style={styles.line}/>
                 <BlankButton
                     text="Agregar productos"
-                    onPress={()=>{
-                        navigation.navigate('CreateProd')
-                    }}
+                    onPress={toggleOverlay}
                 />
-                <View style={styles.line}/>
+                {/*<View style={styles.line}/>
                 <BlankButton
                     text="Estadisticas de consumo"
                     onPress={()=>{
                         navigation.navigate('Stats')
                     }}
-                />
+                />*/}
             </View>
             <View style={styles.lay2}>
                 <Button 

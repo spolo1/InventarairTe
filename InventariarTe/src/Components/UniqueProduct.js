@@ -1,32 +1,20 @@
-import React, { useState} from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
-import { Checkbox } from 'react-native-paper';
 
 const UniqueProduct = (props) => {
-    const [checked,setCheked] = useState(false);
-    const {text,date} = props
+    const {text,date,erase, } = props
 
-    const borrar=()=>{
-
-    }
     return(
             <View style={styles.container}>
                 <View>
-                <Checkbox
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        setCheked(!checked);
-                    }}
-                    color='green'
-                />
                 </View>
                 <View style={styles.content}>    
                     <Text style = {styles.text}>{text}</Text>
                     <Text>{date}</Text>
                 </View>
                 <View style={styles.trash}>
-                    <TouchableOpacity onPress={()=>borrar()}>
+                    <TouchableOpacity onPress={erase}>
                         <IconIonicons 
                             name='trash-outline'
                             size={30}
@@ -43,7 +31,7 @@ const styles = StyleSheet.create({
     container:{
         borderRadius:5,
         height:60,
-        backgroundColor: '#EA8D8D',
+        backgroundColor: '#9ADB91',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around',
