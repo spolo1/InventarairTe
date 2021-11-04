@@ -17,6 +17,8 @@
     "parse": "^3.3.1",
     "react": "17.0.2",
     "react-native": "0.66.1",
+    "react-native-barcode-mask": "^1.2.4",
+    "react-native-camera": "git+https://git@github.com/react-native-community/react-native-camera.git",
     "react-native-date-picker": "^4.1.1",
     "react-native-elements": "^3.4.2",
     "react-native-paper": "^4.9.2",
