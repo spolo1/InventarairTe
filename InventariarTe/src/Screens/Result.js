@@ -21,7 +21,10 @@ function Result({navigation, route}){
     return(
         <View style={Styles._mainContainer}>
             <Text style={Styles._heading}>Results</Text>
-            <Text style={Styles._txtStyle}>Barcode Type: {code.type}</Text>
+            {
+                
+            console.log({code})
+            }
             <Text style={Styles._txtStyle}>Barcode Data: {code.data}</Text>
             <TouchableOpacity
                 onPress={_onScanAgainClick}

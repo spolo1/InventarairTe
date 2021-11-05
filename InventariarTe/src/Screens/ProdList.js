@@ -9,21 +9,20 @@ import Buton from '../Components/Button';
 import Parse from 'parse/react-native';
 
 const CreateProd = ({navigation}) => {  
-    {/*const [searchQuery, setSearchQuery] = useState('');
-    //Barra de busqueda de producto
-    const onChangeSearch = query => setSearchQuery(query);*/}
     const [visible, setVisible] = useState(false);
     const [products, setProducts] = useState([])
-    {/*const [checked,setCheked] = useState(false);*/}
 
     const toggleOverlay = () => {
         setVisible(!visible);
     };
-
+    
     const buscar= async function (){
-        const ProdQuery = new Parse.Query('Products')
+        const currentUser = await Parse.User.currentAsync();
         try{
+            const ProdQuery = new Parse.Query('ActiveProducts')
+            ProdQuery.contains('UserProduct',currentUser.id)
             let Prod = await ProdQuery.find();
+            //let dataDate = Prod[0].get('DueDate')
             setProducts(Prod)
             return true;
         }catch(error){
@@ -32,7 +31,7 @@ const CreateProd = ({navigation}) => {
     }
     const del= async function(ProdId){
         console.log('Entre al borrado '+ ProdId)
-        let Prod = new Parse.Object('Products')
+        let Prod = new Parse.Object('ActiveProducts')
         Prod.set('objectId', ProdId);
         try{
             await Prod.destroy();
@@ -42,9 +41,6 @@ const CreateProd = ({navigation}) => {
             Alert.alert('Advertencia!',error.message);
         }
     }
-    {/*const recargar = () => {
-        Realizar busqueda de la barra de busqueda
-    }*/}
     return (
         <View style={styles.container}>
             <View style={styles.top}>
@@ -64,33 +60,6 @@ const CreateProd = ({navigation}) => {
                         </TouchableOpacity>
                 </View>
             </View>
-            {/*<View style={styles.Searchbar}>
-                <View style={styles.search}>
-                    <Searchbar
-                        placeholder="Search"
-                        onChangeText={onChangeSearch}
-                        value={searchQuery}
-                    />
-                </View>
-                <View style={styles.btn}>
-                    <Button
-                        mode="contained"
-                        color='#188209'
-                        onPress={()=>buscar()}
-                    >
-                        Buscar
-                    </Button>
-                </View>
-                <View style={styles.reload}>
-                    <TouchableOpacity onPress={()=>recargar()}>
-                        <IconIonicons
-                            name='reload'
-                            size={30}
-                            color='#188209'
-                            />
-                    </TouchableOpacity>
-                </View>
-            </View>*/}
             <View style={styles.content}>
                 <ScrollView>
                 {products !== null &&
@@ -100,7 +69,6 @@ const CreateProd = ({navigation}) => {
                             key={Prod.id}
                             id={Prod.id}
                             text={Prod.get('ProductName')}
-                            date='Proximamente'
                             erase={()=>del(Prod.id)}
                         />
                     ))}

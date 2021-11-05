@@ -1,38 +1,74 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Alert, } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Alert, ScrollView, } from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 import Button from '../Components/Button';
 import RoundButton from '../Components/RoundButton';
 import Parse from 'parse/react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SearchProduct = ({navigation}) => {
 
     const [product,setProduct] = useState()
-    
+    const [comp, setComp] = useState()
+    const [resProd, setProd] = useState()
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show,setShow]= useState(false);
+    const [text,setText]=useState('Fecha de Vencimiento');
+    const [cant, setCant] = useState('');
+
     const SearchProd = async function (product){
-        let query = new Parse.Query ('Products');
         console.log(product)
         try{
-            query.contains('Code',product)
-            let queryResult = await query.find();
-            console.log(queryResult);
-            console.log(queryResult.length)
-            if(queryResult.length === 0 || queryResult.length > 1){
-                Alert.alert("Advertencia!", 'Producto no encontrado');
-                submitAndClear();
-            }
-            else{
-                submitAndClear();
-                navigation.navigate('CreateProdCode')
-            }
+            const ProdQuery = new Parse.Query('Products');
+            ProdQuery.contains('Code',product)
+            let Prod = await ProdQuery.find();
+            setComp(Prod)
+            console.log(Prod);
         }catch(error){
             Alert.alert('Advertencia!',error.message);
         }
         
     }
+    const onChange = (event,selectedDate)=>{
+        const currentDate =  selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        
+        let temp = new Date(currentDate);
+        let format = temp.getDate()+'/'+(temp.getMonth()+1)+'/'+temp.getFullYear();
+        setText (format)
+        console.log(format)
+    }
+    
+    const showMode = (currentMode) =>{
+        setShow(true)
+        setMode(currentMode)
+    } 
+
+
+    const CreateProd = async function (Prod) {
+        let Active = new Parse.Object('ActiveProducts');
+        const currentUser = await Parse.User.currentAsync();
+        const newName = Prod.get('ProductName')
+            const newDate = new Date(date);
+            const newCant = cant;
+            const newCode = Prod.get('Code');
+            const newUser = currentUser.id;
+            Active.set('DueDate', newDate);
+            Active.set('ProductName', newName);
+            Active.set('Code', newCode);
+            Active.set("Cantidad",newCant);
+            Active.set('UserProduct', newUser);
+            await Active.save();
+            submitAndClear();
+    }
     const submitAndClear = () => {
         let clear = '';
         setProduct(clear);
+        setCant(clear);
+        setDate(clear);
+        navigation.navigate('ProdList')
     }
     return (
         <SafeAreaView style={styles.container}>
@@ -44,7 +80,7 @@ const SearchProduct = ({navigation}) => {
                     <IconIonicons name='arrow-back' size={30}/>
             </TouchableOpacity>
             <View style={styles.form}>
-                <Text style={styles.text}>Reiniciar Contraseña</Text>
+                <Text style={styles.text}>Buscar Producto</Text>
                 <Text style={styles.label}> Código de barras</Text>
                 <View style={styles.inputs}>
                     <IconIonicons 
@@ -72,6 +108,50 @@ const SearchProduct = ({navigation}) => {
                 text="Cancelar"
                 onPress={()=>{navigation.navigate('ProdList')}}
             />
+                {comp !== null &&
+                    comp !== undefined &&
+                    comp.map((Prod) => (
+                        <View style={styles.productBox}>
+                            <Text style={styles.textresult}>Producto</Text>
+                            <View style={styles.titleRes}>
+                                <Text style={styles.header}>Nombre Producto:</Text>
+                                <Text> {Prod.get('ProductName')}</Text>
+                            </View>
+                            <View style={styles.titleRes}>
+                                <Text style={styles.header}>Código Producto:</Text>
+                                <Text> {Prod.get('Code')}</Text>
+                            </View>
+                            <Text style={{paddingRight:'74%'}}>Cantidad</Text>
+                            <View style={styles.InputBox}>
+                                <TextInput
+                                    placeholder='Cantidad' 
+                                    textAlign='left'
+                                    value={cant}
+                                    autoCapitalize='none'
+                                    onChangeText={(val)=>setCant(val)}
+                                    clearButtonMode='always'
+                                />            
+                            </View>
+                            <Text style={{paddingRight:'48%'}}>Fecha de Vencimiento</Text>
+                            <View style={styles.InputBox}>
+                                <Text onPress={()=> showMode('date')}>
+                                    {text}
+                                </Text>
+                                {show && (
+                                    <DateTimePicker
+                                    testID='datetimepicker'
+                                    value={date}
+                                    mode={date}
+                                    display='spinner'
+                                    onChange = {onChange}
+                                    />)} 
+                            </View>
+                            <Button
+                                text="Crear Producto"
+                                onPress={() =>CreateProd(Prod)}
+                            />
+                        </View>
+                ))}
         </SafeAreaView>
     );
 }
@@ -91,14 +171,14 @@ const styles = StyleSheet.create({
         marginTop:30
     },
     form:{
-        marginTop:'15%',
+        marginTop:'5%',
         justifyContent:'center',
         alignItems:'center',  
     },
     text:{
         fontSize:20,
         color:'#188209',
-        marginBottom:40,
+        marginBottom:20,
     },
     InputBox:{
         backgroundColor:'#E0DEDE',
@@ -125,5 +205,24 @@ const styles = StyleSheet.create({
     },
     label:{
         marginRight:'40%',
+    },
+    productBox:{
+        marginTop:'5%',
+        alignItems:'center',
+        width:'80%',
+        flexDirection:'column',
+    },
+    textresult:{
+        fontSize:20,
+        color:'#188209',
+        marginBottom:15,
+    },
+    titleRes:{
+        marginTop:15,
+        flexDirection:'row',
+    },
+    header:{
+        fontWeight: 'bold',
+        fontSize:15
     },
 })

@@ -19,7 +19,6 @@ const CreateProd = ({navigation}) => {
   const [show,setShow]= useState(false);
   const [text,setText]=useState('Fecha de Vencimiento');
   const [visible, setVisible] = useState(false);
-    
   const toggleOverlay = () => {
       setVisible(!visible);
   };
@@ -42,24 +41,51 @@ const CreateProd = ({navigation}) => {
   } 
 
   const CreateProduct = async function (){
+    let query = new Parse.Query ('Products');
+    let Prod = new Parse.Object('Products');
+    let Active = new Parse.Object('ActiveProducts');
+    const currentUser = await Parse.User.currentAsync();
+
     const newName = prodName;
     const newCode = code;
-    {/*const newDate = date;*/}
-    let Prod = new Parse.Object('Products');
-    Prod.set('ProductName', newName);
-    Prod.set('Code', newCode);
-    {/*Prod.set('Vencimiento',newDate);*/}
-
+    const newDate = new Date(date);
+    const newCant = cant;
+    const newUser = currentUser.id    
+    
     try{
-      await Prod.save();
-      Alert.alert('Exito!','Producto agregado!');
-      submitAndClear();
-      
-      return true;
+      console.log('Buscando')
+      query.contains('Code',code)
+      let queryResult = await query.find();
+      if(queryResult.length === 0 || queryResult.length > 1){
+        //cuando el producto no existe
+        console.log('El producto no existia antes')
+        Active.set('DueDate', new Date (date));
+        Active.set('ProductName', newName);
+        Active.set('Code', newCode);
+        Active.set("Cantidad",newCant);
+        Active.set('UserProduct', newUser);
+        Prod.set('ProductName', newName);
+        Prod.set('Code', newCode);
+        await Active.save();
+        await Prod.save();
+        
+        Alert.alert('Exito!','Producto agregado!');
+        submitAndClear();
+      }
+      else{
+        console.log('el producto ya existe')
+        Active.set('DueDate', newDate);
+        Active.set('ProductName', newName);
+        Active.set('Code', newCode);
+        Active.set("Cantidad",newCant);
+        Active.set('UserProduct', newUser);
+        await Active.save();
+        navigation.navigate('ProdList')
+      }
     }catch(error){
       Alert.alert('Advertencia!',error.message);
-      return false;
     }
+
   }
   const submitAndClear = () => {
     let clear = '';
