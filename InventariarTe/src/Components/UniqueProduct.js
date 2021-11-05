@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 
 const UniqueProduct = (props) => {
-    const {text,date,erase, } = props
+    const {text,fecha,erase, } = props
 
     return(
             <View style={styles.container}>
@@ -11,7 +11,7 @@ const UniqueProduct = (props) => {
                 </View>
                 <View style={styles.content}>    
                     <Text style = {styles.text}>{text}</Text>
-                    <Text>{date}</Text>
+                    <Text>{fecha}</Text>
                 </View>
                 <View style={styles.trash}>
                     <TouchableOpacity onPress={erase}>

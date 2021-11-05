@@ -8,17 +8,19 @@ import Parse from 'parse/react-native';
 
 function ScanCode({navigation}){
 
-    //variables initialization
     const [camRef, setCamRef] = useState(null);
-
+    const [prod, constProd] = useState();
     const _onBarcodeScanned = async function (code){
       let query = new Parse.Query ('Products');
       console.log('Entro')
       try{
         console.log('Buscando')
+        console.log('code'+code)
           query.contains('Code',code.data)
           let queryResult = await query.find();
-          console.log(queryResult);
+          constProd(queryResult);
+          console.log(queryResult)
+          console.log(queryResult[0].get('ProductName'))
           console.log(queryResult.length)
           if(queryResult.length === 0 || queryResult.length > 1){
             navigation.navigate('CreateProd')
@@ -35,13 +37,6 @@ function ScanCode({navigation}){
         console.log(error.message)
       }
   }
-    //on successfully scanning move to results screens
-    {/*function _onBarcodeScanned(code){
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'result', params:{'code': code} }],
-        });
-    }*/}
 
     return(
         <View style={Styles._mainContainer}>

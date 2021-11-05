@@ -11,7 +11,6 @@ import Parse from 'parse/react-native';
 const CreateProd = ({navigation}) => {  
     const [visible, setVisible] = useState(false);
     const [products, setProducts] = useState([])
-
     const toggleOverlay = () => {
         setVisible(!visible);
     };
@@ -69,6 +68,7 @@ const CreateProd = ({navigation}) => {
                             key={Prod.id}
                             id={Prod.id}
                             text={Prod.get('ProductName')}
+                            fecha={Prod.get('DueDate')}
                             erase={()=>del(Prod.id)}
                         />
                     ))}
