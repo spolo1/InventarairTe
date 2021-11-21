@@ -21,9 +21,11 @@ const CreateProd = ({navigation}) => {
             const ProdQuery = new Parse.Query('ActiveProducts')
             ProdQuery.contains('UserProduct',currentUser.id)
             let Prod = await ProdQuery.find();
-            //let dataDate = Prod[0].get('DueDate')
+            let dataDate = Prod[0].get('DueDate')
+            let act = new Date()
+            let temp = Math.round((dataDate-act)/(1000*60*60*24))
             setProducts(Prod)
-            return true;
+            return temp;
         }catch(error){
             Alert.alert('Advertencia!',error.message);
         }
@@ -68,7 +70,7 @@ const CreateProd = ({navigation}) => {
                             key={Prod.id}
                             id={Prod.id}
                             text={Prod.get('ProductName')}
-                            fecha={Prod.get('DueDate')}
+                            fecha={Prod.get('Dias')}
                             erase={()=>del(Prod.id)}
                         />
                     ))}

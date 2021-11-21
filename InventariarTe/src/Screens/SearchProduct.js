@@ -16,7 +16,7 @@ const SearchProduct = ({navigation}) => {
     const [show,setShow]= useState(false);
     const [text,setText]=useState('Fecha de Vencimiento');
     const [cant, setCant] = useState('');
-
+    const act = new Date()
     const SearchProd = async function (product){
         console.log(product)
         try{
@@ -60,6 +60,8 @@ const SearchProduct = ({navigation}) => {
             Active.set('Code', newCode);
             Active.set("Cantidad",newCant);
             Active.set('UserProduct', newUser);
+            Active.set('Dias', Math.round((newDate-act)/(1000*60*60*24)))
+            
             await Active.save();
             submitAndClear();
     }

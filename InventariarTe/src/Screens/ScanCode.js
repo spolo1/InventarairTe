@@ -6,6 +6,7 @@ import {
 import { RNCamera } from 'react-native-camera';
 import Parse from 'parse/react-native';
 
+
 function ScanCode({navigation}){
 
     const [camRef, setCamRef] = useState(null);

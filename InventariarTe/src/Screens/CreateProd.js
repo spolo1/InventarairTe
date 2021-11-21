@@ -19,6 +19,7 @@ const CreateProd = ({navigation}) => {
   const [show,setShow]= useState(false);
   const [text,setText]=useState('Fecha de Vencimiento');
   const [visible, setVisible] = useState(false);
+  const act = new Date()
   const toggleOverlay = () => {
       setVisible(!visible);
   };
@@ -64,6 +65,7 @@ const CreateProd = ({navigation}) => {
         Active.set('Code', newCode);
         Active.set("Cantidad",newCant);
         Active.set('UserProduct', newUser);
+        Active.set('Dias', Math.round((newDate-act)/(1000*60*60*24)))
         Prod.set('ProductName', newName);
         Prod.set('Code', newCode);
         await Active.save();

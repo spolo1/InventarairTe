@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "988462123362",
+    "project_id": "inventariarte-23816",
+    "storage_bucket": "inventariarte-23816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988462123362:android:89335619ad90dacfb0443b",
+        "android_client_info": {
+          "package_name": "com.inventariarte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "988462123362-duu30jsvcn6hq0iab1a7kfja09bivhgs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj_ui7cRriJh33UVAVY27_gzLLHWD04Oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "988462123362-duu30jsvcn6hq0iab1a7kfja09bivhgs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

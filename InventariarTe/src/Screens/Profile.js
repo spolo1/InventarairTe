@@ -54,12 +54,7 @@ const Profile= ({navigation}) => {
                 source={require('../Images/3.png')}
             />
             <View style={styles.lay1}>
-                <BlankButton
-                    text="Historial de productos"
-                    onPress={()=>{
-                        navigation.navigate('History')
-                    }}
-                />
+                
                 <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
                     <Text>¿De que manera quieres crear el producto?</Text>
                     <Button
@@ -71,7 +66,6 @@ const Profile= ({navigation}) => {
                         onPress={()=>{navigation.navigate('CreateProd')}}
                     />
                 </Overlay>
-                <View style={styles.line}/>
                 <BlankButton
                     text="Agregar productos"
                     onPress={toggleOverlay}
