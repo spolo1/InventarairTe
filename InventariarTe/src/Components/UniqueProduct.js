@@ -3,15 +3,33 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
 
 const UniqueProduct = (props) => {
-    const {text,fecha,erase, } = props
+    const {text,cantidad,erase,dias } = props
 
     return(
             <View style={styles.container}>
-                <View>
-                </View>
                 <View style={styles.content}>    
                     <Text style = {styles.text}>{text}</Text>
-                    <Text>{fecha}</Text>
+                    <View style={{flexDirection:'row'}}>
+                        <View>
+                            <Text>Cantidad: </Text> 
+                        </View>
+                        <View>
+                            <Text>{cantidad}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={{flexDirection:'column', alignItems:'center', marginRight:'5%'}}>
+                    <View style={{flexDirection:'row'}}>
+                        <View>
+                            <Text>{dias}</Text>
+                        </View>
+                        <View>
+                            <Text>Días</Text>
+                        </View>
+                    </View>
+                    <View>
+                        <Text>restantes</Text>
+                    </View>
                 </View>
                 <View style={styles.trash}>
                     <TouchableOpacity onPress={erase}>

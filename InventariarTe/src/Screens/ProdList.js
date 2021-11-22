@@ -70,7 +70,8 @@ const CreateProd = ({navigation}) => {
                             key={Prod.id}
                             id={Prod.id}
                             text={Prod.get('ProductName')}
-                            fecha={Prod.get('Dias')}
+                            cantidad={Prod.get('Cantidad')}
+                            dias={Prod.get('Dias')}
                             erase={()=>del(Prod.id)}
                         />
                     ))}

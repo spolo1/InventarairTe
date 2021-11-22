@@ -11,13 +11,6 @@ const TopBar = () => {
                     Inventariarte
                 </Text>
             </View>
-                <TouchableOpacity>
-                    <IconIonicons 
-                        name='notifications-outline'
-                        size={30}
-                        color='#FFFFFF'
-                    />  
-                </TouchableOpacity>
         </View>
     );
 }

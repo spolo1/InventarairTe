@@ -4,6 +4,7 @@ import Button from '../Components/Button';
 import RoundButton from '../Components/RoundButton'
 import Parse from 'parse/react-native';
 import IconIonicons from 'react-native-vector-icons/Ionicons'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 function Result({navigation, route}){
     const {code} = route.params;
@@ -13,13 +14,14 @@ function Result({navigation, route}){
     const [text,setText]=useState('Fecha de Vencimiento');
     const [cant, setCant] = useState('');
     const [comp,setComp]= useState()
-
+    const act = new Date()
+    const [product,setProduct] = useState()
     const searchProd = async function (){
         console.log('entre',code.data)
         let data = code.data
         try{
             const ProdQuery = new Parse.Query('Products');
-            ProdQuery.contains('code',data)
+            ProdQuery.contains('Code',data)
             let Prod = await ProdQuery.find();
             setComp(Prod)
             console.log('resultado',Prod)
@@ -28,7 +30,33 @@ function Result({navigation, route}){
             Alert.alert('Advertencia!',error.message)
         }
     }
-
+    const CreateProd = async function (Prod){
+        console.log('entramos')
+        let Active = new Parse.Object('ActiveProducts');
+        const currentUser = await Parse.User.currentAsync();
+        const newName = Prod.get('ProductName')
+        const newDate = new Date (date)
+        const newCant=cant
+        const newCode = Prod.get('Code')
+        const newUser = currentUser.id
+        Active.set('DueDate', newDate);
+            Active.set('ProductName', newName);
+            Active.set('Code', newCode);
+            Active.set("Cantidad",newCant);
+            Active.set('UserProduct', newUser);
+            Active.set('Dias', Math.round((newDate-act)/(1000*60*60*24)))
+            
+            await Active.save();
+            submitAndClear();
+    }
+    const submitAndClear = () => {
+        let clear = '';
+        setProduct(clear);
+        setCant(clear);
+        setDate(clear);
+        console.log('se cargo el producto')
+        navigation.navigate('ProdList')
+    }
     function _onScanAgainClick(){
         navigation.reset({
             index: 0,
