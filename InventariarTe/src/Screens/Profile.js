@@ -70,13 +70,13 @@ const Profile= ({navigation}) => {
                     text="Agregar productos"
                     onPress={toggleOverlay}
                 />
-                {/*<View style={styles.line}/>
+                <View style={styles.line}/>
                 <BlankButton
-                    text="Estadisticas de consumo"
+                    text="Estadísticas de consumo"
                     onPress={()=>{
                         navigation.navigate('Stats')
                     }}
-                />*/}
+                />
             </View>
             <View style={styles.lay2}>
                 <Button 

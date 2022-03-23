@@ -1,5 +1,5 @@
 import React,{useState}from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ListViewBase, } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, } from 'react-native';
 import TopBar from '../Components/TopBar'
 import BottomBar from '../Components/BottomBar'
 import Product from '../Components/UniqueProduct'
@@ -11,37 +11,87 @@ import Parse from 'parse/react-native';
 const CreateProd = ({navigation}) => {  
     const [visible, setVisible] = useState(false);
     const [products, setProducts] = useState([])
+    const [estate, setEstate] = useState();
     const toggleOverlay = () => {
         setVisible(!visible);
     };
-    
     const buscar= async function (){
         const currentUser = await Parse.User.currentAsync();
         try{
             const ProdQuery = new Parse.Query('ActiveProducts')
+            const Consumed = new Parse.Query ('Consume')
+            Consumed.contains('CantUser', currentUser.id);
+            let finQuery = await Consumed.find();
+            setEstate(finQuery);
+            ProdQuery.ascending('DueDate')
             ProdQuery.contains('UserProduct',currentUser.id)
             let Prod = await ProdQuery.find();
-            let dataDate = Prod[0].get('DueDate')
-            let act = new Date()
-            let temp = Math.round((dataDate-act)/(1000*60*60*24))
             setProducts(Prod)
-            return temp;
         }catch(error){
             Alert.alert('Advertencia!',error.message);
         }
     }
+
     const del= async function(ProdId){
         console.log('Entre al borrado '+ ProdId)
         let Prod = new Parse.Object('ActiveProducts')
         Prod.set('objectId', ProdId);
         try{
             await Prod.destroy();
-            buscar();
-            console.log('borrado completo')
+            delUpdate();
+            Alert.alert('Notificación','Producto eliminado correctamente')
         }catch(error){
             Alert.alert('Advertencia!',error.message);
         }
     }
+
+    const update= async function(ProdId, Cant){
+        let Prod = new Parse.Object ('ActiveProducts');
+        Prod.set('objectId', ProdId);
+        if(Cant > 1 ){
+            let temp = parseInt(Cant) - 1;
+            Prod.set('Cantidad',  temp.toString());
+            try{
+                await Prod.save();
+                Alert.alert('Atención', 'Producto actualizado correctamente')
+                delUpdate(Cant);              
+            }
+            catch{
+                Alert.alert('Error',error.message);
+            }
+        }
+        else {
+            del(ProdId)
+        }
+    }
+
+    const delUpdate = async function(Cant){
+        console.log('Entre a delUpdate', Cant)
+        const consume = new Parse.Object ('Consume');
+        const delQuery = new Parse.Query('Consume');
+        const currentUser = await Parse.User.currentAsync();
+
+        try{
+            delQuery.contains('CantUser', currentUser.id);
+            let queryResult = await delQuery.find();
+            if (queryResult.length === 0 || queryResult.length > 1) {
+                console.log('El susuario no existe');
+                consume.set('CantUser', currentUser.id);
+                consume.set('Cantidad',1);
+                await consume.save();
+                buscar();
+            }
+            else{
+                console.log('El susuario existe');
+                buscar();
+                //Aqui va la acutalizacion
+            }
+        }
+        catch{
+            Alert.alert('Advertencia', error.message);
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.top}>
@@ -72,7 +122,7 @@ const CreateProd = ({navigation}) => {
                             text={Prod.get('ProductName')}
                             cantidad={Prod.get('Cantidad')}
                             dias={Prod.get('Dias')}
-                            erase={()=>del(Prod.id)}
+                            erase={()=>update(Prod.id,Prod.get('Cantidad'))}
                         />
                     ))}
                 </ScrollView>
@@ -142,5 +192,16 @@ const styles = StyleSheet.create({
     item:{
         borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.12)',
+    },
+    toggle:{
+        backgroundColor:'#188209',
+        marginBottom:10,
+        flex:1,
+        alignItems:'center',
+        justifyContent: 'center',
+        borderRadius:5,
+    },
+    toggleInput:{
+        flex:1,
     },
 })

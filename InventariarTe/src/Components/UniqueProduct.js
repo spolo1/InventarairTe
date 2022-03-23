@@ -24,7 +24,7 @@ const UniqueProduct = (props) => {
                             <Text>{dias}</Text>
                         </View>
                         <View>
-                            <Text>Días</Text>
+                            <Text> Días</Text>
                         </View>
                     </View>
                     <View>

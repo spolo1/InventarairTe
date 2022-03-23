@@ -51,7 +51,7 @@ const CreateProd = ({navigation}) => {
     const newCode = code;
     const newDate = new Date(date);
     const newCant = cant;
-    const newUser = currentUser.id    
+    const newUser = currentUser.id;
     
     try{
       console.log('Buscando')
@@ -70,9 +70,8 @@ const CreateProd = ({navigation}) => {
         Prod.set('Code', newCode);
         await Active.save();
         await Prod.save();
-        
         Alert.alert('Exito!','Producto agregado!');
-        submitAndClear();
+        update(newCant);
       }
       else{
         console.log('el producto ya existe')
@@ -81,14 +80,42 @@ const CreateProd = ({navigation}) => {
         Active.set('Code', newCode);
         Active.set("Cantidad",newCant);
         Active.set('UserProduct', newUser);
+        Active.set('Estado'.State);
         await Active.save();
+        update(newCant);
         navigation.navigate('ProdList')
       }
     }catch(error){
       Alert.alert('Advertencia!',error.message);
     }
-
   }
+
+  const update = async function (Cant){
+    const currentUser = await Parse.User.currentAsync();
+    let cantQuery = new Parse.Query ('Activos');
+    let ActiveProd = new Parse.Object('Activos');
+    try{
+      cantQuery.contains('CantUser',currentUser.id);
+      let queryResult = await cantQuery.find();
+      if(queryResult.length === 0 || queryResult.length > 1) {
+        console.log('El usuario no existe')
+        console.log(Cant)
+        ActiveProd.set('CantUser', currentUser.id);
+        ActiveProd.set('Cantidad', Cant)
+        await ActiveProd.save();
+        submitAndClear();
+      }
+      else{
+        console.log('El producto existe')
+        //Aqui va la actualizacion de la cantidad
+        submitAndClear();
+      }
+    }
+    catch{
+      Alert.alert('Advertencia!',error.message);
+    }
+  }
+
   const submitAndClear = () => {
     let clear = '';
     setprodName (clear);

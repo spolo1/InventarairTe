@@ -38,17 +38,42 @@ function Result({navigation, route}){
         const newDate = new Date (date)
         const newCant=cant
         const newCode = Prod.get('Code')
-        const newUser = currentUser.id
+        const newUser = currentUser.id;
         Active.set('DueDate', newDate);
             Active.set('ProductName', newName);
             Active.set('Code', newCode);
             Active.set("Cantidad",newCant);
             Active.set('UserProduct', newUser);
             Active.set('Dias', Math.round((newDate-act)/(1000*60*60*24)))
-            
             await Active.save();
-            submitAndClear();
+            update(newCant);
     }
+
+    const update = async function (Cant){
+        const currentUser = await Parse.User.currentAsync();
+        let cantQuery = new Parse.Query ('Activos');
+        let ActiveProd = new Parse.Object('Activos');
+        try{
+            cantQuery.contains('CantUser',currentUser.id);
+            let queryResult = await cantQuery.find();
+            if(queryResult.length === 0 || queryResult.length > 1) {
+                console.log('El usuario no existe')
+                console.log(Cant)
+                ActiveProd.set('CantUser', currentUser.id);
+                ActiveProd.set('Cantidad', Cant)
+                await ActiveProd.save();
+                submitAndClear();
+            }
+            else{
+                console.log('El producto existe')
+                //Aqui va la actualizacion de la cantidad
+                submitAndClear();
+            }
+            }
+            catch{
+            Alert.alert('Advertencia!',error.message);
+            }
+        }
     const submitAndClear = () => {
         let clear = '';
         setProduct(clear);
@@ -57,6 +82,8 @@ function Result({navigation, route}){
         console.log('se cargo el producto')
         navigation.navigate('ProdList')
     }
+
+    
     function _onScanAgainClick(){
         navigation.reset({
             index: 0,

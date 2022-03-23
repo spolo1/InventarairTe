@@ -16,14 +16,12 @@ function ScanCode({navigation}){
       console.log('Entro')
       try{
         console.log('Buscando')
-        console.log('code'+code)
           query.contains('Code',code.data)
           let queryResult = await query.find();
           constProd(queryResult);
           console.log(queryResult)
-          console.log(queryResult[0].get('ProductName'))
           console.log(queryResult.length)
-          if(queryResult.length === 0 || queryResult.length > 1){
+          if(queryResult.length == 0){
             navigation.navigate('CreateProd')
             console.log('No encontrado')
           }

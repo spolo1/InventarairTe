@@ -16,6 +16,7 @@ const SearchProduct = ({navigation}) => {
     const [show,setShow]= useState(false);
     const [text,setText]=useState('Fecha de Vencimiento');
     const [cant, setCant] = useState('');
+    const [estado, setEstado]= useState();
     const act = new Date()
     const SearchProd = async function (product){
         console.log(product)
@@ -61,9 +62,34 @@ const SearchProduct = ({navigation}) => {
             Active.set("Cantidad",newCant);
             Active.set('UserProduct', newUser);
             Active.set('Dias', Math.round((newDate-act)/(1000*60*60*24)))
-            
             await Active.save();
-            submitAndClear();
+            update(newCant);
+    }
+
+    const update = async function (Cant){
+        const currentUser = await Parse.User.currentAsync();
+        let cantQuery = new Parse.Query ('Activos');
+        let ActiveProd = new Parse.Object('Activos');
+        try{
+            cantQuery.contains('CantUser',currentUser.id);
+            let queryResult = await cantQuery.find();
+            if(queryResult.length === 0 || queryResult.length > 1) {
+                console.log('El usuario no existe')
+                console.log(Cant)
+                ActiveProd.set('CantUser', currentUser.id);
+                ActiveProd.set('Cantidad', Cant)
+                await ActiveProd.save();
+                submitAndClear();
+            }
+            else{
+                console.log('El producto existe')
+                //Aqui va la actualizacion de la cantidad
+                submitAndClear();
+            }
+        }
+        catch{
+            Alert.alert('Advertencia!',error.message);
+        }
     }
     const submitAndClear = () => {
         let clear = '';
